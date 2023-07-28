@@ -1,4 +1,4 @@
-use core::num;
+
 //takes a temperature in celcius or fahrenheit and convert it to the other
 //first have the calculations to convert ready to go.
 //from c - f multiply by 1.8 and add 35
@@ -20,22 +20,8 @@ fn convert_to_celcius(x: f32) -> f32{
 }
 
 fn main() {
-    println!("give a number to convert");
-    let mut user_number = String::new();
-        io::stdin()
-            .read_line(&mut user_number)
-            .expect("failed to readline");
 
 //needs to be validated with a match statement 
-    let user_number: f32 = user_number
-        .trim()
-        .parse()
-        .expect("couldnt parse");
-    println!("Your number: {}", user_number );
-
-
-    
-    let mut user_temp_preference:String;
       
     // while user_temp_preference != "F"{
 
@@ -47,27 +33,43 @@ fn main() {
     //     println!("{}", user_temp_preference == "F")
     // };
     loop{
-        user_temp_preference = String::new();
-        println!("Which converter would you like to use? (F/C)");
-            io::stdin()
-            .read_line(&mut user_temp_preference)
+        println!("\nGive a number to convert");
+        let mut user_number = String::new();
+
+        io::stdin()
+            .read_line(&mut user_number)
             .expect("failed to readline");
-        let user_temp_preference = user_temp_preference.trim();
 
-        if user_temp_preference.to_uppercase() == "F"{
-            let temp_in_fahrenheit: f32 = convert_to_fahrenheit(user_number);
-             println!("The temperature in fahrenheit: {} F", temp_in_fahrenheit); 
-             break;
+        let user_number: f32 = match user_number.trim().parse(){
+            Ok(num)=>num,
+            Err(_)=>continue,
+        };
 
-        }else if user_temp_preference.to_uppercase() == "C"{
-            let temp_in_celcius: f32 = convert_to_celcius(user_number);
-            println!("The temperature in celcius is: {} C", temp_in_celcius);
-            break;
+        'conversion: loop{
+            let mut user_temp_preference:String;
+            user_temp_preference = String::new();
+            println!("Which converter would you like to use? (F/C)");
+                io::stdin()
+                .read_line(&mut user_temp_preference)
+                .expect("failed to readline");
+            let user_temp_preference = user_temp_preference.trim();
 
-        }else{
-            println!("Invalid input");
-            continue;
+            if user_temp_preference.to_uppercase() == "F"{
+                let temp_in_fahrenheit: f32 = convert_to_fahrenheit(user_number);
+                println!("The temperature in fahrenheit: {} F", temp_in_fahrenheit); 
+                break;
+
+            }else if user_temp_preference.to_uppercase() == "C"{
+                let temp_in_celcius: f32 = convert_to_celcius(user_number);
+                println!("The temperature in celcius is: {} C", temp_in_celcius);
+                break;
+
+            }else{
+                println!("Invalid input");
+                continue 'conversion;
+            }
         }
+        break;
     }
 
 
